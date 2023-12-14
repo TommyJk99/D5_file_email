@@ -16,8 +16,7 @@ import multer from "multer";
 //     }
 //   },
 // });
-
-const upload = multer({ storage });
+// const upload = multer({ storage });
 const apiRouter = express.Router();
 
 apiRouter.use("/authors", authorsRouter);
@@ -27,10 +26,10 @@ apiRouter.get("/", (req, res) => {
   res.json({ message: "apiRouter is working👍" });
 });
 
-apiRouter.patch("/multipart", upload.single("avatar"), (req, res, next) => {
-  console.log(req.file.path);
-  res.send();
-});
+// apiRouter.patch("/multipart", upload.single("avatar"), (req, res, next) => {
+//   console.log(req.file.path);
+//   res.send();
+// });
 
 //servirebbe a recuperare i file nel server tramite il loro percorso ma noi useremo cloudinary
 // apiRouter.get("/download/:filename"),
@@ -38,4 +37,4 @@ apiRouter.patch("/multipart", upload.single("avatar"), (req, res, next) => {
 //     res.send(path.resolve("./src/uploads/" + req.params.filename));
 //   };
 
-// export default apiRouter;
+export default apiRouter;

@@ -1,6 +1,18 @@
 import express from "express";
 import { Author } from "../modules/authors.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { v2 as cloudinary } from "cloudinary";
+
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "uploads",
+  },
+});
+
+const upload = multer({ storage: cloudinaryStorage });
 
 const authorsRouter = express.Router();
 
@@ -67,4 +79,18 @@ authorsRouter.delete("/:id", async (req, res, next) => {
       res.status(204).send();
     }
   } catch {}
+});
+
+authorsRouter.patch("/:id/avatar", upload.single("avatar"), async (req, res, next) => {
+  try {
+    console.log(req.file);
+    let updated = await Author.findByIdAndUpdate(
+      req.params.id,
+      { avatar: req.file.path },
+      { new: true }
+    );
+    res.send(updated);
+  } catch (error) {
+    next(error);
+  }
 });
